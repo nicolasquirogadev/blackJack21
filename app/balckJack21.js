@@ -39,3 +39,15 @@ let numPlayers = parseInt(prompt("Bienvenido/s a BlackJack21! \nCuantos jugadore
 dealCards(numPlayers)
 console.log("Croupier's Hand: ", playerHand[0])
 console.log("Player 1's Hand:", playerHand[1])
+
+let msg = "";
+for (let i = 0; i < numPlayers; i++) {
+    msg += `Player ${i + 1}'s hand` ;
+    for (let card of playerHand[i]) {
+        msg += `[${card.rank} of ${card.suit}],` ;  
+    }
+    msg = msg.slice(0, -2);
+    msg += `\n`
+}
+
+alert(msg)

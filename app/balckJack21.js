@@ -4,7 +4,7 @@ const suits = ['diamonds', 'hearts', 'spades', 'cloves']
 
 let playerHand = []
 
-const ranks = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
+const ranks = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 
 function createDeck() {
     for (let suit of suits){
@@ -31,12 +31,12 @@ function dealCards(numPlayers) {
     }
 }
 
-createDeck()
-shuffleDeck()
+createDeck();
+shuffleDeck();
 
-let numPlayers = 1 + parseInt(prompt("Bienvenido/s a BlackJack21! \nCuantos jugadores enfrentaran al croupier?"))
+let numPlayers = 1 + parseInt(prompt("Bienvenido/s a BlackJack21! \nCuantos jugadores enfrentaran al croupier?"));
 
-dealCards(numPlayers)
+dealCards(numPlayers);
 console.log("Croupier's Hand: ", playerHand[0])
 console.log("Player 1's Hand:", playerHand[1])
 
@@ -47,14 +47,16 @@ for (let i=0; i<1; i++) {
         msg += `[ ${card.rank} of ${card.suit} ] `
     msg = msg.slice(0, -2);
     msg += `\n` };
+    msg += `\n`
 for (let i = 1; i < numPlayers; i++) {
     msg += `Player ${i}'s hand: \n` ;
     for (let card of playerHand[i]) {
         msg += `[ ${card.rank} of ${card.suit} ] `
     msg = msg.slice(0, -2);
     msg += `\n`
-}
+};
+msg += `\n`
 }
 }
 
-alert(msg)
+alert(msg);

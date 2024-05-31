@@ -34,9 +34,9 @@ function dealCards(numPlayers) {
 createDeck();
 shuffleDeck();
 
-let numPlayers = 1 + parseInt(prompt("Bienvenido/s a BlackJack21! \nCuantos jugadores enfrentaran al croupier?"));
+//let numPlayers = 1 + parseInt(prompt("Bienvenido/s a BlackJack21! \nCuantos jugadores enfrentaran al croupier?"));
 
-dealCards(numPlayers);
+//dealCards(numPlayers);
 console.log("Croupier's Hand: ", playerHand[0])
 console.log("Player 1's Hand:", playerHand[1])
 

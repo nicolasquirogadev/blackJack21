@@ -119,7 +119,7 @@ function stay() {
     else if (playerSum < croupierSum) {
         msg = "You Lose!";
     }
-    else if (playerSum === 21) {
+    else if (playerSum == 21) {
         msg = "BLACKJACK! \n You Win!"
     }
     

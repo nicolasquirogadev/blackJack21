@@ -9,26 +9,20 @@
 </head>
 <body>
     <div class="window">
-        <div class="table">
-            <div class="green">
-                <div class="g-card-1"></div>
-                <div class="g-card-2"></div>
-            </div>
-            <div class="p-hand">
-                <div class="p-card-1"></div>
-                <div class="p-card-2"></div>
-            </div>
-        
+        <h3>Croupier: <span id="croupier-sum"></span></h3>
+        <div id="croupier-cards">
+            <img src="./cards/BACK.png">
         </div>
+            
+        <div id="player-cards"></div>
+        <h3 class="player-text">You: <span id="player-sum"></span></h3>
     </div>
     <ul class="menu">
-        <li>START</li>
-        <li>RULES</li>
-        <li>EXIT</li>
+        <li id="startbutton">START</li>
+        <li id="ask-for-card">ASK FOR CARD</li>
+        <li id="stay">STAY</li>
         
     </ul>
-    <h1>BlackJack21</h1>
-    <p>La app crea un mazo de cartas y las mezcla aleatoriamente.</p> 
-    <p>Reparte dos cartas aleatorias a cada jugador y dos cartas aleatorias al croupier.</p>
+    <p id="results"></p>
 </body>
 </html>

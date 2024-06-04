@@ -1,62 +1,152 @@
-let cardsDeck = []
+var croupierSum = 0;
+var playerSum = 0;
 
-const suits = ['diamonds', 'hearts', 'spades', 'cloves']
+var croupierAceCount = 0;
+var playerAceCount = 0;
 
-let playerHand = []
+var hidden;
+cardsDeck = []
 
-const ranks = ['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+var canHit = true; 
+
+
+const suits = ['D', 'H', 'S', 'C']
+
+const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 
 function createDeck() {
     for (let suit of suits){
         for (let rank of ranks) {
-        cardsDeck.push({ rank: rank, suit: suit});
+        cardsDeck.push(rank + `-` + suit);
         }
     }
 }
 
 function shuffleDeck(){
     for (let i = cardsDeck.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() *i +1);
+        let j = Math.floor(Math.random() *i);
     [cardsDeck[i], cardsDeck[j]] = [cardsDeck[j], cardsDeck[i]]
     }
 }
 
-function dealCards(numPlayers) {
-    for (let i = 0; i < numPlayers; i++){
-        const hand = []
-        for (let j = 0; j < 2; j++){
-            hand.push(cardsDeck.pop())
-        }
-        playerHand.push(hand)
+ window.onload = function(){
+    createDeck();
+    shuffleDeck();
+}
+console.log(cardsDeck)
+
+let numPlayers = 2
+
+document.getElementById("startbutton").addEventListener("click", startGame);
+
+function startGame() {
+    hidden = cardsDeck.pop();
+    croupierSum += getValue(hidden);
+    croupierAceCount += checkAce(hidden);
+    //console.log(hidden);
+    //console.log(croupierSum)
+
+    while (croupierSum < 17) {
+        let cardImg = document.createElement("img");
+        let card = cardsDeck.pop();
+        cardImg.src = "./cards/" + card + ".png";
+        croupierSum += getValue(card);
+        croupierAceCount += checkAce(card);
+        document.getElementById("croupier-cards").append(cardImg);
+    }
+    console.log(croupierSum);
+
+    for (let i = 0; i < 2; i++) {
+        let cardImg = document.createElement("img");
+        let card = cardsDeck.pop();
+        cardImg.src = "./cards/" + card + ".png";
+        playerSum += getValue(card);
+        playerAceCount += checkAce(card);
+        document.getElementById("player-cards").append(cardImg);
+    }
+    console.log(playerSum);
+    
+
+}
+document.getElementById("ask-for-card").addEventListener("click", askForCard); 
+document.getElementById("stay").addEventListener("click", stay);
+
+function askForCard() {
+    if (!canHit) {
+        return;
+    }
+
+        let cardImg = document.createElement("img");
+        let card = cardsDeck.pop();
+        cardImg.src = "./cards/" + card + ".png";
+        playerSum += getValue(card);
+        playerAceCount += checkAce(card);
+        document.getElementById("player-cards").append(cardImg);
+
+    if (reduceAce(playerSum, playerAceCount) > 21) {
+        canHit = false;
     }
 }
+    document.getElementById("croupier-sum").innerText = croupierSum;
+    document.getElementById("player-sum").innerText = playerSum;
+    document.getElementById("results").innerText = msg;
 
-createDeck();
-shuffleDeck();
+function stay() {
+    croupierSum = reduceAce(croupierSum, croupierAceCount);
+    playerSum = reduceAce(playerSum, playerAceCount);
 
-//let numPlayers = 1 + parseInt(prompt("Bienvenido/s a BlackJack21! \nCuantos jugadores enfrentaran al croupier?"));
+    canHit = false;
+    document.getElementById("hidden").src = "./cards/" + hidden + ".png";
 
-//dealCards(numPlayers);
-console.log("Croupier's Hand: ", playerHand[0])
-console.log("Player 1's Hand:", playerHand[1])
+    let msg = "";
+    if (playerSum > 21) {
+        msg = "You Lose!";
+    }
+    else if (croupierSum > 21){
+        msg = "You Win!";
+    }
+    else if (playerSum == croupierSum){
+        msg = "Tie!";
+    }
+    else if (playerSum > croupierSum) {
+        msg = "You Win!";
+    }
+    else if (playerSum < croupierSum) {
+        msg = "You Lose!";
+    }
+    else if (playerSum === 21) {
+        msg = "BLACKJACK! \n You Win!"
+    }
 
-let msg = "";
-for (let i=0; i<1; i++) {
-    msg += `Croupier's hand: \n` ;
-    for (let card of playerHand[0]) {
-        msg += `[ ${card.rank} of ${card.suit} ] `
-    msg = msg.slice(0, -2);
-    msg += `\n` };
-    msg += `\n`
-for (let i = 1; i < numPlayers; i++) {
-    msg += `Player ${i}'s hand: \n` ;
-    for (let card of playerHand[i]) {
-        msg += `[ ${card.rank} of ${card.suit} ] `
-    msg = msg.slice(0, -2);
-    msg += `\n`
-};
-msg += `\n`
+    
 }
+
+
+function getValue(card) {
+    let data = card.split(`-`);
+    let value = data[0];
+
+    if (isNaN(value)) {
+        if (value == "A"){
+            return 11;
+        }
+        return 10;
+    }
+
+    return parseInt(value);
+} 
+
+function checkAce(card) {
+    if (card[0] == "A") {
+        return 1;
+    }
+    return 0;
 }
 
-alert(msg);
+function reduceAce (playerSum, playerAceCount) {
+    while (playerSum > 21 && playerAceCount > 0) {
+        playerSum -= 10;
+        playerAceCount -= 1;
+    }
+    return playerSum;
+}

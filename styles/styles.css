@@ -1,89 +1,50 @@
 * {
     background-color: rgb(5, 85, 11);
-    z-index: inherit;
+    font-family: Arial;
+    text-align: center;
 }
 
 .window {
     margin-top: 5vh;
     margin-left: 25px;
-    background-color: rgb(37, 16, 6);
+    background-color: rgb(0, 117, 10);
     height: 80vh;
     width: 75vw;
     border: solid, rgb(22, 5, 0), 10px;
     padding-right: 0;
+    position: relative;
 
 }
 
-.table{
-    background-color:  rgb(0, 117, 10);
+#croupier-cards {
+    background-color: rgb(0, 117, 10);
+    top: 10%;
     width: 100%;
-    height: 75%;
-}
-.green {
-    background-color: green;
-    border-radius: 25%;
-    width: 75%;
-    height: 25%;
-    min-height: 100px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
-    top: 20%;
-    align-content: center;
-
+    position: absolute;
 }
 
-.g-card-1 {
-    margin-left: 37%;
-    display: inline-block;
-    position: relative;
-    height: 90%;
-    width: 150px;
-    background-color: white;
-    align-content: center;
-    border: solid black 6px;
+#croupier-cards img {
+    height: 175px;
+    width: 125px;
+    margin: 1px;
+    background-color: rgb(4, 97, 12);
 }
 
-.g-card-2 {
-    display: inline-block;
-    position: relative;
-    height: 90%;
-    width: 150px;
-    background-color: white;
-    border: solid black 6px;
+#player-cards img {
+    height: 175px;
+    width: 125px;
+    margin: 1px;
+    margin-top: 15px;
 }
 
-.p-hand {
-    position: relative;
+#player-cards {
     height: 33%;
-    top: 75%;
     background-image: url(https://t4.ftcdn.net/jpg/02/96/50/07/240_F_296500796_4KgtrZkzwFo8Ru74R73haD9lmsPb9kS4.jpg);
     width: 100%;
-    align-content: center;
-    margin-left: 0;
-
-}
-
-.p-card-1 {
-    margin-left: 40%;
-    display: inline-block;
-    position: relative;
-    height: 90%;
-    width: 150px;
-    background-color: white;
-    align-content: center;
-    border: solid black 6px;
-
-}
-
-.p-card-2 {
-    display: inline-block;
-    position: relative;
-    height: 90%;
-    width: 150px;
-    background-color: white;
-    border: solid black 6px;
-
+    position: absolute;
+    bottom: 0;
+    margin: auto auto;
+        
 }
 
 .menu{
@@ -111,4 +72,24 @@
 
 .menu li:hover {
     background-color: rgb(6, 128, 16);;
+}
+
+
+h3 {
+    color: white;
+}
+
+.player-text {
+    width: 100%;
+    position: absolute;
+    top: 60%;
+
+
+}
+
+#results {
+    color: white;
+    position: static;
+    height: 50px;
+    width: 70%;
 }

@@ -65,11 +65,14 @@ function startGame() {
         document.getElementById("player-cards").append(cardImg);
     }
     console.log(playerSum);
-    
+    document.getElementById("ask-for-card").addEventListener("click", askForCard); 
+    document.getElementById("stay").addEventListener("click", stay);
+    document.getElementById("player-sum").innerText = playerSum;
 
 }
-document.getElementById("ask-for-card").addEventListener("click", askForCard); 
-document.getElementById("stay").addEventListener("click", stay);
+
+
+
 
 function askForCard() {
     if (!canHit) {
@@ -86,17 +89,19 @@ function askForCard() {
     if (reduceAce(playerSum, playerAceCount) > 21) {
         canHit = false;
     }
-}
-    document.getElementById("croupier-sum").innerText = croupierSum;
     document.getElementById("player-sum").innerText = playerSum;
-    document.getElementById("results").innerText = msg;
+}
+    
+    
 
 function stay() {
-    croupierSum = reduceAce(croupierSum, croupierAceCount);
-    playerSum = reduceAce(playerSum, playerAceCount);
+    
 
     canHit = false;
     document.getElementById("hidden").src = "./cards/" + hidden + ".png";
+
+    croupierSum = reduceAce(croupierSum, croupierAceCount);
+    playerSum = reduceAce(playerSum, playerAceCount);
 
     let msg = "";
     if (playerSum > 21) {
@@ -117,8 +122,10 @@ function stay() {
     else if (playerSum === 21) {
         msg = "BLACKJACK! \n You Win!"
     }
-
     
+    document.getElementById("croupier-sum").innerText = croupierSum;
+    document.getElementById("player-sum").innerText = playerSum;
+    document.getElementById("results").innerText = msg;
 }
 
 
@@ -150,3 +157,4 @@ function reduceAce (playerSum, playerAceCount) {
     }
     return playerSum;
 }
+

@@ -5,7 +5,7 @@ var croupierAceCount = 0;
 var playerAceCount = 0;
 
 var hidden;
-cardsDeck = []
+let cardsDeck = []
 
 var canHit = true; 
 
@@ -17,7 +17,7 @@ const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 function createDeck() {
     for (let suit of suits){
         for (let rank of ranks) {
-        cardsDeck.push(rank + `-` + suit);
+        cardsDeck.push(rank + "-" + suit);
         }
     }
 }
@@ -29,17 +29,21 @@ function shuffleDeck(){
     }
 }
 
- window.onload = function(){
-    createDeck();
-    shuffleDeck();
-}
-console.log(cardsDeck)
 
-let numPlayers = 2
 
 document.getElementById("startbutton").addEventListener("click", startGame);
 
 function startGame() {
+    createDeck();
+    shuffleDeck();
+    console.log(cardsDeck);
+    canHit = true;
+
+    let hiddenImg = document.createElement("img");
+    hiddenImg.src = "./cards/BACK.png";
+    hiddenImg.id = "hidden"
+    document.getElementById("croupier-cards").append(hiddenImg);
+
     hidden = cardsDeck.pop();
     croupierSum += getValue(hidden);
     croupierAceCount += checkAce(hidden);
@@ -54,7 +58,7 @@ function startGame() {
         croupierAceCount += checkAce(card);
         document.getElementById("croupier-cards").append(cardImg);
     }
-    console.log(croupierSum);
+    console.log(`Croupier:` + croupierSum);
 
     for (let i = 0; i < 2; i++) {
         let cardImg = document.createElement("img");
@@ -64,7 +68,7 @@ function startGame() {
         playerAceCount += checkAce(card);
         document.getElementById("player-cards").append(cardImg);
     }
-    console.log(playerSum);
+    console.log(`You:` + playerSum);
     document.getElementById("ask-for-card").addEventListener("click", askForCard); 
     document.getElementById("stay").addEventListener("click", stay);
     document.getElementById("player-sum").innerText = playerSum;
@@ -122,15 +126,41 @@ function stay() {
     else if (playerSum == 21) {
         msg = "BLACKJACK! \n You Win!"
     }
+
+    cardsDeck = [];
     
     document.getElementById("croupier-sum").innerText = croupierSum;
     document.getElementById("player-sum").innerText = playerSum;
-    document.getElementById("results").innerText = msg;
+    alert(msg) ;
+    document.getElementById("startbutton").addEventListener("click", resetGame);
 }
 
+function resetGame() {
+    
+    const element1 = document.getElementById("player-cards");
+    while (element1.firstChild) {
+    element1.removeChild(element1.firstChild);
+    }
+
+    const element2 = document.getElementById("croupier-cards");
+    while (element2.firstChild) {
+    element2.removeChild(element2.firstChild);
+    }
+
+    croupierSum = 0;
+    playerSum = 0;
+
+    croupierAceCount = 0;
+    playerAceCount = 0;
+
+
+    document.getElementById("croupier-sum").innerText = "";
+
+    startGame();
+}
 
 function getValue(card) {
-    let data = card.split(`-`);
+    let data = card.split("-");
     let value = data[0];
 
     if (isNaN(value)) {

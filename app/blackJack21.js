@@ -1,3 +1,4 @@
+
 var croupierSum = 0;
 var playerSum = 0;
 
@@ -8,11 +9,12 @@ var hidden;
 let cardsDeck = []
 
 var canHit = true; 
-
+var roundWin;
 
 const suits = ['D', 'H', 'S', 'C']
 
 const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+
 
 function createDeck() {
     for (let suit of suits){
@@ -20,16 +22,14 @@ function createDeck() {
         cardsDeck.push(rank + "-" + suit);
         }
     }
-}
+};
 
 function shuffleDeck(){
     for (let i = cardsDeck.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() *i);
     [cardsDeck[i], cardsDeck[j]] = [cardsDeck[j], cardsDeck[i]]
     }
-}
-
-
+};
 
 document.getElementById("startbutton").addEventListener("click", startGame);
 
@@ -37,7 +37,11 @@ function startGame() {
     createDeck();
     shuffleDeck();
     console.log(cardsDeck);
+    
     canHit = true;
+
+    getChips();
+    document.getElementById("chips-counter").innerText = getChips();
 
     let hiddenImg = document.createElement("img");
     hiddenImg.src = "./cards/BACK.png";
@@ -47,8 +51,6 @@ function startGame() {
     hidden = cardsDeck.pop();
     croupierSum += getValue(hidden);
     croupierAceCount += checkAce(hidden);
-    //console.log(hidden);
-    //console.log(croupierSum)
 
     while (croupierSum < 17) {
         let cardImg = document.createElement("img");
@@ -58,7 +60,7 @@ function startGame() {
         croupierAceCount += checkAce(card);
         document.getElementById("croupier-cards").append(cardImg);
     }
-    console.log(`Croupier:` + croupierSum);
+    console.log(`Croupier has: ` + croupierSum);
 
     for (let i = 0; i < 2; i++) {
         let cardImg = document.createElement("img");
@@ -68,14 +70,12 @@ function startGame() {
         playerAceCount += checkAce(card);
         document.getElementById("player-cards").append(cardImg);
     }
-    console.log(`You:` + playerSum);
+    console.log(`You have: ` + playerSum);
     document.getElementById("ask-for-card").addEventListener("click", askForCard); 
     document.getElementById("stay").addEventListener("click", stay);
     document.getElementById("player-sum").innerText = playerSum;
 
 }
-
-
 
 
 function askForCard() {
@@ -97,10 +97,7 @@ function askForCard() {
 }
     
     
-
 function stay() {
-    
-
     canHit = false;
     document.getElementById("hidden").src = "./cards/" + hidden + ".png";
 
@@ -110,28 +107,62 @@ function stay() {
     let msg = "";
     if (playerSum > 21) {
         msg = "You Lose!";
+        roundWin = false;
+        Swal.fire({
+            title: "You lose!",
+            text: `You busted out with ${playerSum} !`,
+            icon: "error"
+          });
     }
     else if (croupierSum > 21){
         msg = "You Win!";
+        roundWin = true;
+        Swal.fire({
+            title: "You win!",
+            text: `The croupier busted out with ${croupierSum} !`,
+            icon: "success"
+          });
     }
     else if (playerSum == croupierSum){
         msg = "Tie!";
+        roundWin = false;
     }
     else if (playerSum > croupierSum) {
         msg = "You Win!";
+        roundWin = true;
+        Swal.fire({
+            title: "You win!",
+            text: `You beat the croupier ${playerSum} to ${croupierSum} !`,
+            icon: "success"
+          });
     }
     else if (playerSum < croupierSum) {
         msg = "You Lose!";
+        roundWin = false;
+        Swal.fire({
+            title: "You lose!",
+            text: `Your ${playerSum} lose to the croupier's ${croupierSum} `,
+            icon: "error"
+          });
     }
     else if (playerSum == 21) {
         msg = "BLACKJACK! \n You Win!"
+        roundWin = true;
+        Swal.fire({
+            title: "You win!",
+            text: `You have ${playerSum}! That's a BLACKJACK! `,
+            icon: "success"
+          });
     }
+
+   roundOutcome();
 
     cardsDeck = [];
     
+    document.getElementById("chips-counter").innerText = getChips();
     document.getElementById("croupier-sum").innerText = croupierSum;
     document.getElementById("player-sum").innerText = playerSum;
-    alert(msg) ;
+    document.getElementById("results").innerText = msg;
     document.getElementById("startbutton").addEventListener("click", resetGame);
 }
 
@@ -147,13 +178,18 @@ function resetGame() {
     element2.removeChild(element2.firstChild);
     }
 
+    const element3 = document.getElementById("results");
+    while (element3.firstChild) {
+        element3.removeChild(element3.firstChild);
+        }
+
     croupierSum = 0;
     playerSum = 0;
 
     croupierAceCount = 0;
     playerAceCount = 0;
 
-
+    document.getElementById("chips-counter").innerText = "";
     document.getElementById("croupier-sum").innerText = "";
 
     startGame();
@@ -188,3 +224,34 @@ function reduceAce (playerSum, playerAceCount) {
     return playerSum;
 }
 
+// Verificamos que haya fichas guardadas en localStorage, de no haberlas, se inicializa el banco en 1000.
+if (!localStorage.getItem('chips')) {
+    localStorage.setItem('chips', 1000);
+  }
+  
+  // Funcion para obtener el conteo actual de fichas.
+  function getChips() {
+    return parseInt(localStorage.getItem('chips'));
+  }
+  
+  // Funcion para actualizar el valor del contador de fichas.
+  function updateChips(amount) {
+    let currentChips = getChips();
+    currentChips += amount;
+    localStorage.setItem('chips', currentChips);
+    }
+
+    //Funcion que marca la variacion en las fichas segun el resultado de la ronda. En cada mano se juega por 100 fichas.
+    function roundOutcome() {
+        //Si el jugador vence al croupier, recibe el doble de lo que aposto para jugar, es decir, 200 fichas.
+        if(roundWin) {
+            updateChips(200);
+            console.log(`You have ` +getChips()+ ` chips left`);
+            document.getElementById("chips-counter").innerText = getChips();
+        }else {
+            //Si el croupier vence al jugador, éste perderá las 100 fichas que apostó.
+            updateChips(-100);
+            console.log(`You have ` +getChips()+ ` chips left`);
+            document.getElementById("chips-counter").innerText = getChips();
+        }
+    }

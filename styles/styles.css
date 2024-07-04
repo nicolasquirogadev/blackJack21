@@ -97,3 +97,9 @@ h3 {
     font-size: 3rem;
 }
 
+.dashboard-info {
+    display: grid;
+    grid-template-columns: 2fr;
+    grid-auto-flow: column;
+    grid-auto-columns: 4fr;
+}

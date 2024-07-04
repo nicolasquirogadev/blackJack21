@@ -259,6 +259,17 @@ function roundOutcome() {
           })
         return;
      }
+
+     if(bet < 0){
+        console.log("Please enter a valid bet number.");
+         Swal.fire({
+            title: 'Error!',
+            text: 'Please enter a valid bet value',
+            icon: 'error',
+            confirmButtonText: 'Cool'
+          })
+        return;
+     }
     
      // Si el jugador vence al croupier, recibe el doble de lo que apostó para jugar.
     if (roundWin) {

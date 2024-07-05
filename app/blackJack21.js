@@ -112,7 +112,6 @@ function stay() {
     if (!canStay) {
         return;
     } 
-    canStay = false;
     canHit = false;
     document.getElementById("hidden").src = "./assets/cards/" + hidden + ".png";
 
@@ -123,6 +122,7 @@ function stay() {
     if (playerSum > 21) {
         msg = "You Lose!";
         roundWin = false;
+        canStay = false;
         Swal.fire({
             title: "You lose!",
             text: `You busted out with ${playerSum} !`,
@@ -132,6 +132,7 @@ function stay() {
     else if (croupierSum > 21){
         msg = "You Win!";
         roundWin = true;
+        canStay = false;
         Swal.fire({
             title: "You win!",
             text: `The croupier busted out with ${croupierSum} !`,
@@ -141,10 +142,12 @@ function stay() {
     else if (playerSum == croupierSum){
         msg = "Tie!";
         roundWin = false;
+        canStay = false;
     }
     else if (playerSum > croupierSum) {
         msg = "You Win!";
         roundWin = true;
+        canStay = false;
         Swal.fire({
             title: "You win!",
             text: `You beat the croupier ${playerSum} to ${croupierSum} !`,
@@ -154,6 +157,7 @@ function stay() {
     else if (playerSum < croupierSum) {
         msg = "You Lose!";
         roundWin = false;
+        canStay = false;
         Swal.fire({
             title: "You lose!",
             text: `Your ${playerSum} lose to the croupier's ${croupierSum} `,

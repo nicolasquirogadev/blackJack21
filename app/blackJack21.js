@@ -8,6 +8,7 @@ var playerAceCount = 0;
 var hidden;
 let cardsDeck = []
 
+var canStay = true;
 var canHit = true; 
 var roundWin;
 
@@ -41,6 +42,7 @@ function startGame() {
     shuffleDeck();
     console.log(cardsDeck);
     
+    canStay = true;
     canHit = true;
 
 // Llamamos a la funcion getChips que va a traer el valor del banco de fichas del jugador guardado en el localStorage del navegador, y lo imprimimos en pantalla.
@@ -107,6 +109,10 @@ function askForCard() {
     
  // Funcion que marca el final de la ronda y notifica el resultado utilizando SweetAlert.   
 function stay() {
+    if (!canStay) {
+        return;
+    } 
+    canStay = false;
     canHit = false;
     document.getElementById("hidden").src = "./assets/cards/" + hidden + ".png";
 
@@ -154,6 +160,9 @@ function stay() {
             icon: "error"
           });
     }
+    
+    
+    
 
 // Al ejecutar roundOutcome(), el valor de las fichas (chips) se actualiza segun el resultado de la ronda.
    roundOutcome();
